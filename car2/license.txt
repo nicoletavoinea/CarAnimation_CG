@@ -1,0 +1,11 @@
+Model Information:
+* title:	[FREE] Polestar 1
+* source:	https://sketchfab.com/3d-models/free-polestar-1-4a368c71047c4eb0829525d933752828
+* author:	Martin Trafas (https://sketchfab.com/Bexxie)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "[FREE] Polestar 1" (https://sketchfab.com/3d-models/free-polestar-1-4a368c71047c4eb0829525d933752828) by Martin Trafas (https://sketchfab.com/Bexxie) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

@@ -3,7 +3,10 @@ let container;
 let camera;
 let renderer;
 let scene;
-let car;
+
+//Load Models
+let cars = []; // array to store all the cars
+let activeCarIndex = 0; // variable to keep track of the active car
 
 let prev = { x: 0, y: 0 };
 let mouse = { x: 0, y: 0 };
@@ -29,7 +32,7 @@ function init() {
   scene.add(ambient);
 
   const light = new THREE.DirectionalLight(0xffffff, 2);
-  light.position.set(50, 4, 100);
+  light.position.set(5, 10, 30);
   scene.add(light);
 
   //Renderer
@@ -39,15 +42,39 @@ function init() {
 
   container.appendChild(renderer.domElement);
 
-  //Load Model
-  let loader = new THREE.GLTFLoader();
-  loader.load("./car/scene.gltf", function (gltf) {
+  //first car
+  let loader1 = new THREE.GLTFLoader();
+  loader1.load("./car1/scene.gltf", function (gltf) {
     scene.add(gltf.scene);
     car = gltf.scene.children[0];
+    car.scale.set(55, 55, 55); // <-- add this line to make the car bigger
     car.rotation.z=0.5;
-    car.scale.set(50, 50, 50); // <-- add this line to make the car bigger
+    car.visible=true;
+    cars.push(car);
     animate();
+
+    console.log('Car 1 loaded.');
+    console.log(car);
   });
+
+  //second car
+  let loader2 = new THREE.GLTFLoader();
+  loader2.load("./car2/scene.gltf", function (gltf) {
+    scene.add(gltf.scene);
+    car = gltf.scene.children[0];
+    car.scale.set(3.5, 3.5, 3.5); // <-- add this line to make the car bigger
+    car.rotation.z=0.5;
+    car.visible=false;
+    cars.push(car);
+    animate();
+    console.log('Car 2 loaded.');
+    console.log(car);
+  });
+
+  console.log(scene.children);
+
+  //Key events
+  document.addEventListener("keydown", onKeyDown);
 
   // Mouse events
   container.addEventListener("mousedown", onMouseDown);
@@ -64,19 +91,17 @@ function animate() {
 function onMouseDown(event) {
   isDragging = true;
   mouse.x = event.clientX;
-  mouse.y = event.clientY;
 }
 
 function onMouseMove(event) {
   if (!isDragging) return;
 
   const deltaX = event.clientX - mouse.x;
-  const deltaY = event.clientY - mouse.y;
   mouse.x = event.clientX;
-  mouse.y = event.clientY;
 
-  const rotZ = car.rotation.z+ deltaX * sensitivity;
-  car.rotation.z = rotZ;
+
+  const rotZ = cars[activeCarIndex].rotation.z + deltaX * sensitivity;
+  cars[activeCarIndex].rotation.z = rotZ;
 
   renderer.render(scene, camera);
 }
@@ -87,6 +112,31 @@ function onMouseUp(event) {
 
 function onMouseLeave(event) {
   isDragging = false;
+}
+
+function onKeyDown(event) {
+  let key=event.keyCode;
+  console.log('keypressed: '+key);
+  if (event.keyCode == 37) { // left arrow
+    activeCarIndex--;
+    if (activeCarIndex < 0) {
+      activeCarIndex = cars.length - 1;
+    }
+  } else if (event.keyCode == 39) { // right arrow
+    activeCarIndex++;
+    if (activeCarIndex >= cars.length) {
+      activeCarIndex = 0;
+    }
+  }
+
+  // hide all the cars except for the active one
+  for (let i = 0; i < cars.length; i++) {
+    if (i === activeCarIndex) {
+      cars[i].visible = true;
+    } else {
+      cars[i].visible = false;
+    }
+  }
 }
 
 init();
