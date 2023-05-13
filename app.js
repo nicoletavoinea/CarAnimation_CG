@@ -44,6 +44,7 @@ function init() {
   loader.load("./car/scene.gltf", function (gltf) {
     scene.add(gltf.scene);
     car = gltf.scene.children[0];
+    car.rotation.z=0.5;
     car.scale.set(50, 50, 50); // <-- add this line to make the car bigger
     animate();
   });
