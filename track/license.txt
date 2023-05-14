@@ -1,0 +1,11 @@
+Model Information:
+* title:	Mini Race Track: Figure 8
+* source:	https://sketchfab.com/3d-models/mini-race-track-figure-8-01fa41e5111543c4b301b644a909a955
+* author:	isimp4aerith (https://sketchfab.com/isimp4aerith)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Mini Race Track: Figure 8" (https://sketchfab.com/3d-models/mini-race-track-figure-8-01fa41e5111543c4b301b644a909a955) by isimp4aerith (https://sketchfab.com/isimp4aerith) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

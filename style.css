@@ -4,10 +4,11 @@
   box-sizing: border-box;
 }
 
-body {
+body, html {
   font-family: sans-serif;
   overflow: hidden;
-  background: url("https://wallpaperaccess.com/full/1091554.jpg");
+
+  background: url("https://wallpaperaccess.com/full/338775.jpg");
 }
 
 .scene,

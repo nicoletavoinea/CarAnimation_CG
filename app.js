@@ -28,11 +28,11 @@ function init() {
   camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
   camera.position.set(0, 3, 30);
 
-  const ambient = new THREE.AmbientLight(0xffd400, 2);
+  const ambient = new THREE.AmbientLight(0x404040, 2);
   scene.add(ambient);
 
-  const light = new THREE.DirectionalLight(0xffffff, 2);
-  light.position.set(5, 10, 30);
+  const light = new THREE.DirectionalLight(0xffffff, 3);
+  light.position.set(-5, 10, 5);
   scene.add(light);
 
   //Renderer
@@ -47,12 +47,12 @@ function init() {
   loader1.load("./car1/scene.gltf", function (gltf) {
     scene.add(gltf.scene);
     car = gltf.scene.children[0];
-    car.scale.set(55, 55, 55); // <-- add this line to make the car bigger
+    car.scale.set(33, 33, 33); // <-- add this line to make the car bigger
     car.rotation.z=0.5;
+    car.position.set(-1.5,0,15)
     car.visible=true;
     cars.push(car);
     animate();
-
     console.log('Car 1 loaded.');
     console.log(car);
   });
@@ -62,8 +62,9 @@ function init() {
   loader2.load("./car2/scene.gltf", function (gltf) {
     scene.add(gltf.scene);
     car = gltf.scene.children[0];
-    car.scale.set(3.5, 3.5, 3.5); // <-- add this line to make the car bigger
+    car.scale.set(5, 5, 5); // <-- add this line to make the car bigger
     car.rotation.z=0.5;
+    car.position.set(-1.5,0.5,15)
     car.visible=false;
     cars.push(car);
     animate();
@@ -71,7 +72,34 @@ function init() {
     console.log(car);
   });
 
-  console.log(scene.children);
+  //third car
+  let loader3 = new THREE.GLTFLoader();
+  loader3.load("./car3/scene.gltf", function (gltf) {
+    scene.add(gltf.scene);
+    car = gltf.scene.children[0];
+    car.scale.set(2, 2, 2); // <-- add this line to make the car bigger
+    car.rotation.z=0.5;
+    car.position.set(-1.5,0.6,15)
+    car.visible=false;
+    cars.push(car);
+    animate();
+    console.log('Car 3 loaded.');
+    console.log(car);
+  });
+
+  //load track
+  let loader = new THREE.GLTFLoader();
+  loader.load("./track/scene.gltf", function (gltf) {
+    scene.add(gltf.scene);
+    track = gltf.scene.children[0];
+    track.scale.set(3, 3, 3); // <-- add this line to make the car bigger
+    track.rotation.z=-0.4;
+    track.visible=true;
+    track.position.set(-3,0,0);
+    animate();
+    console.log('Track loaded.');
+    console.log(car);
+  });
 
   //Key events
   document.addEventListener("keydown", onKeyDown);
@@ -81,6 +109,7 @@ function init() {
   container.addEventListener("mousemove", onMouseMove);
   container.addEventListener("mouseup", onMouseUp);
   container.addEventListener("mouseleave", onMouseLeave);
+  console.log("Cars loaded. Ready to use.");
 }
 
 function animate() {
