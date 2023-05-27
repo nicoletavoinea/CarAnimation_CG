@@ -3,6 +3,8 @@ let container;
 let camera;
 let renderer;
 let scene;
+let isRotating = false;
+let rotationInterval;
 
 //Load Models
 let cars = []; // array to store all the cars
@@ -13,8 +15,11 @@ let mouse = { x: 0, y: 0 };
 let isDragging = false;
 const sensitivity = 0.005;
 
+let rotateButton = document.getElementById("myButton"); 
+
 function init() {
   container = document.querySelector(".scene");
+  rotateButton.addEventListener("click", rotateCar);
 
   //Create scene
   scene = new THREE.Scene();
@@ -26,7 +31,10 @@ function init() {
 
   //Camera setup
   camera = new THREE.PerspectiveCamera(fov, aspect, near, far);
-  camera.position.set(0, 3, 30);
+  // camera.position.set(0, 3, 30);
+  const cameraHeight = 8; // Adjust the camera height
+  camera.position.set(0, cameraHeight, 40);
+  camera.lookAt(new THREE.Vector3(0, 0, 0)); // Set the camera's target
 
   const ambient = new THREE.AmbientLight(0x404040, 2);
   scene.add(ambient);
@@ -44,7 +52,7 @@ function init() {
 
   //first car
   let loader1 = new THREE.GLTFLoader();
-  loader1.load("./car1/scene.gltf", function (gltf) {
+  loader1.load("./models/car1.glb", function (gltf) {
     scene.add(gltf.scene);
     car = gltf.scene.children[0];
     car.scale.set(33, 33, 33); // <-- add this line to make the car bigger
@@ -53,13 +61,11 @@ function init() {
     car.visible=true;
     cars.push(car);
     animate();
-    console.log('Car 1 loaded.');
-    console.log(car);
   });
 
   //second car
   let loader2 = new THREE.GLTFLoader();
-  loader2.load("./car2/scene.gltf", function (gltf) {
+  loader2.load("./models/car2.glb", function (gltf) {
     scene.add(gltf.scene);
     car = gltf.scene.children[0];
     car.scale.set(5, 5, 5); // <-- add this line to make the car bigger
@@ -68,13 +74,11 @@ function init() {
     car.visible=false;
     cars.push(car);
     animate();
-    console.log('Car 2 loaded.');
-    console.log(car);
   });
 
   //third car
   let loader3 = new THREE.GLTFLoader();
-  loader3.load("./car3/scene.gltf", function (gltf) {
+  loader3.load("./models/car3.glb", function (gltf) {
     scene.add(gltf.scene);
     car = gltf.scene.children[0];
     car.scale.set(2, 2, 2); // <-- add this line to make the car bigger
@@ -83,13 +87,11 @@ function init() {
     car.visible=false;
     cars.push(car);
     animate();
-    console.log('Car 3 loaded.');
-    console.log(car);
   });
 
   //load track
   let loader = new THREE.GLTFLoader();
-  loader.load("./track/scene.gltf", function (gltf) {
+  loader.load("./models/track.glb", function (gltf) {
     scene.add(gltf.scene);
     track = gltf.scene.children[0];
     track.scale.set(3, 3, 3); // <-- add this line to make the car bigger
@@ -97,8 +99,6 @@ function init() {
     track.visible=true;
     track.position.set(-3,0,0);
     animate();
-    console.log('Track loaded.');
-    console.log(car);
   });
 
   //Key events
@@ -109,7 +109,10 @@ function init() {
   container.addEventListener("mousemove", onMouseMove);
   container.addEventListener("mouseup", onMouseUp);
   container.addEventListener("mouseleave", onMouseLeave);
-  console.log("Cars loaded. Ready to use.");
+  container.addEventListener("wheel", onMouseScroll);
+
+  
+  // console.log("Cars loaded. Ready to use.");
 }
 
 function animate() {
@@ -167,8 +170,55 @@ function onKeyDown(event) {
     }
   }
 }
+function onMouseScroll(event) {
+  const delta = event.deltaY;
+  const scaleFactor = delta > 0 ? 0.5 : 1.5; // Adjust the scaling factor based on scroll direction
+
+  const targetCameraHeight = camera.position.y * scaleFactor;
+
+    // Define the minimum and maximum height for the camera position
+    const minHeight = 1; // Set your desired minimum height
+    const maxHeight = 300; // Set your desired maximum height
+    const clampedCameraHeight = Math.max(minHeight, Math.min(maxHeight, targetCameraHeight));
+
+console.log("Height:" + targetCameraHeight);
+  // Create a TWEEN animation for smooth camera height transition
+  new TWEEN.Tween(camera.position)
+    .to({ y: clampedCameraHeight }, 1000)
+    .easing(TWEEN.Easing.Quadratic.Out)
+    .onUpdate(() => {
+      camera.lookAt(new THREE.Vector3(0, 0, 0));
+    })
+    .start();
+
+  animate(); // Start the animation loop
+}
+
+function rotateCar(){
+  if(!isRotating){
+    rotateButton.textContent = "Click Stop Rotate";
+    isRotating = true;
+    rotationInterval = setInterval(() => {
+      cars[activeCarIndex].rotation.z += 0.05;
+    },50);
+  }
+  else{
+    rotateButton.textContent = "Click Start Rotate";
+    isRotating = false;
+    clearInterval(rotationInterval);
+  }
+  
+}
+function animate() {
+  requestAnimationFrame(animate);
+  TWEEN.update(); // Update the tween animation
+  renderer.render(scene, camera);
+}
+
 
 init();
+
+
 
 function onWindowResize() {
   camera.aspect = container.clientWidth / container.clientHeight;
